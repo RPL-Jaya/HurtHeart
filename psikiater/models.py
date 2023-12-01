@@ -1,14 +1,9 @@
 from django.db import models
 from authentication.models import User
 
+
+
 # Create your models here.
-class Psikiater(User):
-    kualifikasi = models.BooleanField(default=False)
-    ulasanKonsultasi = models.TextField(default="")
-    jadwalKonsultasi = models.DateTimeField(auto_now_add=True)
-
-    REQUIRED_FIELDS = ['kualifikasi', 'ulasanKonsultasi', 'jadwalKonsultasi']
-
 
 class PsikiaterManager(models.Manager):
     # List of psikiater
@@ -29,3 +24,13 @@ class PsikiaterManager(models.Manager):
             jadwalKonsultasi=data['jadwalKonsultasi'],
         )
         return psikiater
+class Psikiater(User):
+    objects = PsikiaterManager()
+    kualifikasi = models.BooleanField(default=False)
+    ulasanKonsultasi = models.TextField(default="")
+    jadwalKonsultasi = models.DateTimeField(auto_now_add=True)
+
+    REQUIRED_FIELDS = ['kualifikasi', 'ulasanKonsultasi', 'jadwalKonsultasi']
+
+
+

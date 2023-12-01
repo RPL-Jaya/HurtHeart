@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block meta %}
+<title>Profil Psikiater</title>
+{% endblock meta %} {% block content %}
+
+<div>
+<!-- List of Psikiater as "list" context -->
+<ul>
+  {% for psikiater in psikiater_list %}
+  <li>
+    <a href="{% url 'psikiater:psikiater_detail' psikiater.username %}">{{ psikiater.first_name }} {{ psikiater.last_name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+</div>
+
+{% endblock content %}

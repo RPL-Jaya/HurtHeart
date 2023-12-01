@@ -19,3 +19,18 @@ def psikiater_detail_api(request, username):
     context = {'psikiater': model_to_dict(psikiater)}
     # Return psikiater detail in JSON format
     return JsonResponse(context)
+
+
+# List of psikiater
+def psikiater_list(request):
+    # Get all psikiater
+    psikiater = Psikiater.objects.list_psikiater()
+    context = {'psikiater_list': psikiater}
+    return render(request, 'list.html', context)
+
+def psikiater_list_api(request):
+    # Get all psikiater
+    psikiater = Psikiater.objects.all()
+    context = {'psikiater_list': [model_to_dict(psikiater) for psikiater in psikiater]}
+    # Return psikiater list in JSON format
+    return JsonResponse(context)
