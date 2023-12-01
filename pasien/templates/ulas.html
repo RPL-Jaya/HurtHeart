@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% block meta %}
+<title>Register</title>
+{% endblock meta %} {% block content %}
+
+<div class="container">
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="pasien" class="form-label">Pasien</label>
+      <select name="pasien" id="pasien" class="form-control">
+        {% for item in pasien %}
+        <option value="{{ item.username }}">{{ item.first_name }} {{ item.last_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="psikiater" class="form-label">Psikiater</label>
+      <select name="psikiater" id="psikiater" class="form-control">
+        {% for item in psikiater %}
+        <option value="{{ item.username }}">{{ item.first_name }} {{ item.last_name }}</option>
+        {% endfor %}
+      </select>
+
+
+    <div class="mb-3">
+      <label for="rating" class="form-label">Rating</label>
+      <input type="number" class="form-control" name="rating" min="0" max="5" id="rating" />
+    </div>
+
+    <div class="mb-3">
+      <label for="komentar" class="form-label">Komentar</label>
+      <textarea class="form-control" id="komentar" name="komentar" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="tanggal" class="form  -label">Tanggal</label>
+      <input type="date" class="form-control" name="tanggalKonsultasi" id="tanggal" />
+    </div>
+
+    <div class="mb-3">
+      <label for="namaPsikiater" class="form-label">Nama Psikiater</label>
+      <input type="text" class="form-control" name="namaPsikiater" id="namaPsikiater" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock content %}

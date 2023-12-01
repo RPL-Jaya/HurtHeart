@@ -29,6 +29,6 @@ class Ulasan(models.Model):
     psikiater = models.ForeignKey(Psikiater, on_delete=models.CASCADE)
     komentar = models.TextField()
     rating = models.FloatField()
-    tanggalKonsultasi = models.DateTimeField(auto_now_add=True)
+    tanggalKonsultasi = models.DateField()
     namaPsikiater = models.CharField(max_length=100)
 
