@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Psikiater
+from pasien.models import Ulasan
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 
@@ -10,13 +11,15 @@ from django.forms.models import model_to_dict
 def psikiater_detail(request, username):
     # Get psikiater by id
     psikiater = Psikiater.objects.get(username=username)
-    context = {'psikiater': psikiater}
+    ulasan = Ulasan.objects.filter(psikiater=psikiater)
+    context = {'psikiater': psikiater, 'ulasan_list': ulasan}
     return render(request, 'profile.html', context)
 
 def psikiater_detail_api(request, username):
     # Get psikiater by id
     psikiater = Psikiater.objects.get(username=username)
-    context = {'psikiater': model_to_dict(psikiater)}
+    ulasan = Ulasan.objects.filter(psikiater=psikiater)
+    context = {'psikiater': model_to_dict(psikiater), 'ulasan_list': [model_to_dict(ulasan) for ulasan in ulasan]}
     # Return psikiater detail in JSON format
     return JsonResponse(context)
 

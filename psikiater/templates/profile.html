@@ -18,6 +18,26 @@
   <dt>Qualified</dt>
   <dd>{{ psikiater.kualifikasi }}</dd>
 </dl>
+
+<!-- Ulasan -->
+<section>
+  <h2>Ulasan</h2>
+  <main>
+    {% for ulasan in ulasan_list %}
+    <article>
+      <header>
+        Rating : {{ ulasan.rating }} | Tanggal Konsultasi : {{ ulasan.tanggalKonsultasi }}
+      </header>
+      <main>
+        Nama Psikiater: {{ ulasan.namaPsikiater }} | Komentar:
+        <p>
+          {{ ulasan.komentar }}
+        </p>
+      </main>
+    </article>
+    {% endfor %}
+  </main>
+</section>
 </div>
 
 {% endblock content %}
