@@ -18,7 +18,7 @@ class PsikiaterManager(models.Manager):
             first_name=data['first_name'],
             last_name=data['last_name'],
             date_of_birth=data['date_of_birth'],
-            role=data['role'],
+            role='psychiatrist',
             kualifikasi=data['kualifikasi'],
             ulasanKonsultasi=data['ulasanKonsultasi'],
             jadwalKonsultasi=data['jadwalKonsultasi'],
