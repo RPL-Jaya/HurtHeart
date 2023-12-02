@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block meta %}
+<title>Profil Psikiater</title>
+{% endblock meta %} {% block content %}
+
+<div>
+<!-- Psikiater name -->
+<dl>
+  <dt>First Name</dt>
+  <dd>{{ psikiater.first_name }}</dd>
+  <dt>Last Name</dt>
+  <dd>{{ psikiater.last_name }}</dd>
+  <dt>Date of Birth</dt>
+  <dd>{{ psikiater.date_of_birth }}</dd>
+  <dt>Username</dt>
+  <dd>{{ psikiater.username }}</dd>
+  <dt>Email</dt>
+  <dd>{{ psikiater.email }}</dd>
+  <dt>Qualified</dt>
+  <dd>{{ psikiater.kualifikasi }}</dd>
+</dl>
+
+<!-- Ulasan -->
+<section>
+  <h2>Ulasan</h2>
+  <main>
+    {% for ulasan in ulasan_list %}
+    <article>
+      <header>
+        Rating : {{ ulasan.rating }} | Tanggal Konsultasi : {{ ulasan.tanggalKonsultasi }}
+      </header>
+      <main>
+        Nama Psikiater: {{ ulasan.namaPsikiater }} | Komentar:
+        <p>
+          {{ ulasan.komentar }}
+        </p>
+      </main>
+    </article>
+    {% endfor %}
+  </main>
+</section>
+</div>
+
+{% endblock content %}
