@@ -32,3 +32,10 @@ class Ulasan(models.Model):
     tanggalKonsultasi = models.DateField()
     namaPsikiater = models.CharField(max_length=100)
 
+class PesananKonsultasi(models.Model):
+    pasien = models.CharField(max_length=255)
+    jadwal_konsultasi = models.ForeignKey('psikiater.JadwalKonsultasi', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.pasien} - {self.jadwal_konsultasi}"
+

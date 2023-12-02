@@ -33,4 +33,12 @@ class Psikiater(User):
     REQUIRED_FIELDS = ['kualifikasi', 'ulasanKonsultasi', 'jadwalKonsultasi']
 
 
+class JadwalKonsultasi(models.Model):
+    psikiater = models.CharField(max_length=255)
+    tanggal = models.DateTimeField()
+    ketersediaan = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.psikiater} - {self.tanggal}"
+
 

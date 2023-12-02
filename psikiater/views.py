@@ -1,8 +1,12 @@
-from django.shortcuts import render
-from .models import Psikiater
+from django.shortcuts import render, get_object_or_404
+from .models import Psikiater, JadwalKonsultasi
 from pasien.models import Ulasan
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 
 # Create your views here.
 
@@ -37,3 +41,23 @@ def psikiater_list_api(request):
     context = {'psikiater_list': [model_to_dict(psikiater) for psikiater in psikiater]}
     # Return psikiater list in JSON format
     return JsonResponse(context)
+
+@api_view(['GET', 'POST'])
+@csrf_exempt
+def jadwal_konsultasi_list_create(request):
+    if request.method == 'GET':
+        jadwal_konsultasi = JadwalKonsultasi.objects.all()
+        serialized_data = serializers.serialize('json', jadwal_konsultasi)
+        return JsonResponse({'jadwal_konsultasi': serialized_data}, safe=False)
+
+    elif request.method == 'POST':
+        data = request.data
+        jadwal_konsultasi = JadwalKonsultasi.objects.create(
+            psikiater=data['psikiater'],
+            tanggal=data['tanggal'],
+            ketersediaan=data['ketersediaan'],
+        )
+        serialized_data = serializers.serialize('json', [jadwal_konsultasi])
+        return JsonResponse({'jadwal_konsultasi': serialized_data}, safe=False)
+    
+    
