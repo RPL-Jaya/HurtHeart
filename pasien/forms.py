@@ -10,4 +10,4 @@ class UlasanForm(ModelForm):
 class PembayaranForm(ModelForm):
     class Meta:
         model = Pembayaran
-        fileds = ('metodePembayaran', 'statusPembayaran')
+        exclude = ['pasien', 'biayaPembayaran', 'statusPembayaran']
