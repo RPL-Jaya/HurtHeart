@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from .forms import JadwalForm
 from django.contrib.auth.decorators import login_required
+from authentication.models import User
 
 # Create your views here.
 
@@ -54,6 +55,11 @@ def add_jadwal(request):
             kuota_total = form.cleaned_data["kuota_total"]
             Jadwal.objects.create(psikiater = request.user,tanggal = tanggal, jam_mulai = jam_mulai, jam_selesai = jam_selesai, metode = metode, keterangan = keterangan, kuota_total = kuota_total, kuota_tersedia = kuota_total)
             print("saved")
+            
     
     context = {"form":form}
     return render(request, "buat_jadwal.html", context)
+
+@login_required(login_url='/login/')
+def liat_jadwal(request):
+    jadwal = Jadwal.objects.filter(psikiater = request.user)
