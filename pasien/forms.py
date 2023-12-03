@@ -6,3 +6,4 @@ class UlasanForm(ModelForm):
     class Meta:
         model = Ulasan
         fields = ('pasien', 'psikiater', 'komentar', 'rating', 'tanggalKonsultasi', 'namaPsikiater')
+

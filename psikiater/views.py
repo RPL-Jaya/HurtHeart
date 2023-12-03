@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from .models import Psikiater
+from .models import Psikiater, Jadwal
 from pasien.models import Ulasan
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from .forms import JadwalForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -37,3 +39,21 @@ def psikiater_list_api(request):
     context = {'psikiater_list': [model_to_dict(psikiater) for psikiater in psikiater]}
     # Return psikiater list in JSON format
     return JsonResponse(context)
+
+@login_required(login_url='/login/')
+def add_jadwal(request):
+    form = JadwalForm()
+    if request.method == "POST":
+        form = JadwalForm(request.POST)
+        if form.is_valid():
+            tanggal = form.cleaned_data["tanggal"]
+            jam_mulai = form.cleaned_data["jam_mulai"]
+            jam_selesai = form.cleaned_data["jam_selesai"]
+            metode = form.cleaned_data["metode"]
+            keterangan = form.cleaned_data["keterangan"]
+            kuota_total = form.cleaned_data["kuota_total"]
+            Jadwal.objects.create(psikiater = request.user,tanggal = tanggal, jam_mulai = jam_mulai, jam_selesai = jam_selesai, metode = metode, keterangan = keterangan, kuota_total = kuota_total, kuota_tersedia = kuota_total)
+            print("saved")
+    
+    context = {"form":form}
+    return render(request, "buat_jadwal.html", context)

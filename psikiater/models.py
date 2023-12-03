@@ -32,5 +32,12 @@ class Psikiater(User):
 
     REQUIRED_FIELDS = ['kualifikasi', 'ulasanKonsultasi', 'jadwalKonsultasi']
 
-
-
+class Jadwal(models.Model):
+    psikiater = models.ForeignKey(User, on_delete=models.CASCADE)
+    tanggal = models.DateField()
+    jam_mulai = models.TimeField()
+    jam_selesai = models.TimeField()
+    metode = models.CharField(max_length=255)
+    keterangan = models.CharField(max_length=255)
+    kuota_total = models.IntegerField()
+    kuota_tersedia = models.IntegerField()
