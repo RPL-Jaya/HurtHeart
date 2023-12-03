@@ -4,7 +4,7 @@ from django.http import JsonResponse
 
 
 from .models import Pasien, Ulasan, PesananKonsultasi
-from .forms import UlasanForm
+from .forms import UlasanForm, PembayaranForm
 
 from psikiater.models import Psikiater
 

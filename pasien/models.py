@@ -20,9 +20,9 @@ class PasienManager(models.Manager):
             role='patient'
         )
         return Pasien
+    
 class Pasien(User):
     objects = PasienManager()
-
 
 class Ulasan(models.Model):
     pasien = models.ForeignKey(Pasien, on_delete=models.CASCADE)
@@ -38,4 +38,11 @@ class PesananKonsultasi(models.Model):
 
     def __str__(self):
         return f"{self.pasien} - {self.jadwal_konsultasi}"
+
+class Pembayaran(models.Model):
+    pasien = models.ForeignKey(Pasien, on_delete=models.CASCADE)
+    metodePembayaran = models.TextField()
+    buktiPembayaran = models.TextField()
+    statusPembayaran = models.TextField()
+    # timestamp = models.DateTimeField()
 
