@@ -11,3 +11,4 @@ class PembayaranForm(ModelForm):
     class Meta:
         model = Pembayaran
         exclude = ['pasien', 'biayaPembayaran', 'statusPembayaran']
+
