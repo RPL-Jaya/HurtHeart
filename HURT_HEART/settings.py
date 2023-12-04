@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "authentication",
     'psikiater',
     'pasien',
-    'admin',
+    'adminhurt',
 ]
 
 MIDDLEWARE = [
