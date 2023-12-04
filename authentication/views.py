@@ -7,13 +7,9 @@ from .forms import RegisterForm
 # Create your views here.
 
 def register(request):
-    print(request)
     form = RegisterForm()
-    print(form)
     if request.method == "POST":
-        print(request.POST)
         form = RegisterForm(request.POST)
-        print(form.data)
         if form.is_valid():
             user = form.save()
             user.set_password(request.POST.get('password'))

@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core import serializers
 
 from .models import Pasien, Ulasan, PesananKonsultasi
 from .forms import UlasanForm, PembayaranForm
 
 from psikiater.models import Psikiater
-
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 from rest_framework.decorators import api_view
 
 # Create your views here.

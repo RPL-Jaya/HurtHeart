@@ -2,6 +2,8 @@ from django.db import models
 from authentication.models import User
 from psikiater.models import Psikiater
 
+# Create your models here.
+
 class PasienManager(models.Manager):
     # List of Pasien
     def list_pasien(self):
@@ -18,9 +20,9 @@ class PasienManager(models.Manager):
             role='patient'
         )
         return Pasien
-    
 class Pasien(User):
     objects = PasienManager()
+
 
 class Ulasan(models.Model):
     pasien = models.ForeignKey(Pasien, on_delete=models.CASCADE)

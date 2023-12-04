@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Ulasan, Pembayaran
+from .models import Ulasan
 from django import forms
 
 class UlasanForm(ModelForm):
@@ -7,7 +7,3 @@ class UlasanForm(ModelForm):
         model = Ulasan
         fields = ('pasien', 'psikiater', 'komentar', 'rating', 'tanggalKonsultasi', 'namaPsikiater')
 
-class PembayaranForm(ModelForm):
-    class Meta:
-        model = Pembayaran
-        exclude = ['pasien', 'biayaPembayaran', 'statusPembayaran']
