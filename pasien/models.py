@@ -77,7 +77,7 @@ class Pembayaran(models.Model):
         max_length=7,
         choices=METODE_PEMBAYARAN_CHOICE,
     )
-    buktiPembayaran = models.TextField()
+    buktiPembayaran = models.ImageField(upload_to='images')
     statusPembayaran = models.BooleanField(default=False)
     # timestamp = models.DateTimeField()
 
