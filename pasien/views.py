@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
-
-from .models import Pasien, Ulasan
-from .forms import UlasanForm
+from .models import Pasien, Ulasan, PesananKonsultasi
+from .forms import UlasanForm, PembayaranForm
 
 from psikiater.models import Psikiater
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
@@ -38,3 +40,33 @@ def buat_ulasan_api(request):
             return JsonResponse({'message': 'Ulasan berhasil dibuat'})
 
     return JsonResponse({'message': 'Ulasan gagal dibuat'})
+
+@api_view(['GET', 'POST'])
+@csrf_exempt
+def pesanan_konsultasi_pasien(request):
+    if request.method == 'GET':
+        pesanan_konsultasi = PesananKonsultasi.objects.all()
+        serialized_data = serializers.serialize('json', pesanan_konsultasi)
+        return JsonResponse({'pesanan_konsultasi': serialized_data}, safe=False)
+
+    elif request.method == 'POST':
+        data = request.data
+        pesanan_konsultasi = PesananKonsultasi.objects.create(
+            pasien=data['pasien'],
+            jadwal_konsultasi_id=data['jadwal_konsultasi_id'],
+        )
+        serialized_data = serializers.serialize('json', [pesanan_konsultasi])
+        return JsonResponse({'pesanan_konsultasi': serialized_data}, safe=False)
+
+def buat_pembayaran(request):
+    form = PembayaranForm()
+    if request.method == 'POST':
+        form = PembayaranForm(request.POST, request.FILES)
+        data = request.data
+        if form.is_valid():
+            pembayaran = form.save()
+            pembayaran.pasien = data['pasien']
+            pembayaran.save()
+            img_obj = form.instance
+            return render(request, 'pembayaran.html', {'form': form, 'img_obj': img_obj})
+    return render(request, {'form': form})

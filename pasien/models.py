@@ -32,3 +32,54 @@ class Ulasan(models.Model):
     tanggalKonsultasi = models.DateField()
     namaPsikiater = models.CharField(max_length=100)
 
+class PesananKonsultasi(models.Model):
+    BAYAR = "bayar"
+    VERIFY = "verify"
+    PENDING = "pending"
+    SCHED = "scheduled"
+    DONE = "done"
+    
+    STATUS_KONSULTASI_CHOICES = [
+        (BAYAR, "Menunggu Pembayaran"),
+        (VERIFY, "Menunggu Verifikasi Admin"),
+        (PENDING, "Menunggu Konfirmasi Psikiater"),
+        (SCHED, "Konsultasi Terjadwal"),
+        (DONE, "Selesai")
+    ]
+
+    pasien = models.CharField(max_length=255)
+    jadwal_konsultasi = models.ForeignKey('psikiater.JadwalKonsultasi', on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=9,
+        choices=STATUS_KONSULTASI_CHOICES,
+        default=BAYAR
+    )
+
+    def __str__(self):
+        return f"{self.pasien} - {self.jadwal_konsultasi}"
+
+class Pembayaran(models.Model):
+    OTS = "ots"
+    CARD = "card"
+    VA = "va"
+    EWALLET = "ewallet"
+    RETAIL = "retail"
+
+    METODE_PEMBAYARAN_CHOICE = [
+        (OTS, "Bayar di tempat"),
+        (CARD, "Kartu Kredit/Kartu Debit"),
+        (VA, "Virtual Account"),
+        (EWALLET, "E-Wallet"),
+        (RETAIL, "Gerai Retail"),
+    ]
+
+    pasien = models.ForeignKey(Pasien, on_delete=models.CASCADE)
+    biayaPembayaran = models.FloatField()
+    metodePembayaran = models.CharField(
+        max_length=7,
+        choices=METODE_PEMBAYARAN_CHOICE,
+    )
+    buktiPembayaran = models.ImageField(upload_to='images')
+    statusPembayaran = models.BooleanField(default=False)
+    # timestamp = models.DateTimeField()
+
