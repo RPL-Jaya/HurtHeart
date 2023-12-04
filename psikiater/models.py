@@ -32,6 +32,18 @@ class Psikiater(User):
 
     REQUIRED_FIELDS = ['kualifikasi', 'ulasanKonsultasi', 'jadwalKonsultasi']
 
+<<<<<<< HEAD
+
+class JadwalKonsultasi(models.Model):
+    psikiater = models.CharField(max_length=255)
+    tanggal = models.DateTimeField()
+    ketersediaan = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.psikiater} - {self.tanggal}"
+
+
+=======
 class Jadwal(models.Model):
     psikiater = models.ForeignKey(User, on_delete=models.CASCADE)
     tanggal = models.DateField()
@@ -41,3 +53,4 @@ class Jadwal(models.Model):
     keterangan = models.CharField(max_length=255)
     kuota_total = models.IntegerField()
     kuota_tersedia = models.IntegerField()
+>>>>>>> 4b31391a29a08c132228cd6f7758e92ba5c2bef2

@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+from django.shortcuts import render, get_object_or_404
+from .models import Psikiater, JadwalKonsultasi
+from pasien.models import Ulasan
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
+=======
 from django.shortcuts import render
 from .models import Psikiater, Jadwal
 from pasien.models import Ulasan
@@ -6,6 +17,7 @@ from django.forms.models import model_to_dict
 from .forms import JadwalForm
 from django.contrib.auth.decorators import login_required
 from authentication.models import User
+>>>>>>> 4b31391a29a08c132228cd6f7758e92ba5c2bef2
 
 # Create your views here.
 
@@ -41,6 +53,27 @@ def psikiater_list_api(request):
     # Return psikiater list in JSON format
     return JsonResponse(context)
 
+<<<<<<< HEAD
+@api_view(['GET', 'POST'])
+@csrf_exempt
+def jadwal_konsultasi_list_create(request):
+    if request.method == 'GET':
+        jadwal_konsultasi = JadwalKonsultasi.objects.all()
+        serialized_data = serializers.serialize('json', jadwal_konsultasi)
+        return JsonResponse({'jadwal_konsultasi': serialized_data}, safe=False)
+
+    elif request.method == 'POST':
+        data = request.data
+        jadwal_konsultasi = JadwalKonsultasi.objects.create(
+            psikiater=data['psikiater'],
+            tanggal=data['tanggal'],
+            ketersediaan=data['ketersediaan'],
+        )
+        serialized_data = serializers.serialize('json', [jadwal_konsultasi])
+        return JsonResponse({'jadwal_konsultasi': serialized_data}, safe=False)
+    
+    
+=======
 @login_required(login_url='/login/')
 def add_jadwal(request):
     form = JadwalForm()
@@ -63,3 +96,4 @@ def add_jadwal(request):
 @login_required(login_url='/login/')
 def liat_jadwal(request):
     jadwal = Jadwal.objects.filter(psikiater = request.user)
+>>>>>>> 4b31391a29a08c132228cd6f7758e92ba5c2bef2
