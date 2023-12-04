@@ -1,6 +1,6 @@
 from django.db import models
 from authentication.models import User
-from psikiater.models import Psikiater
+from psikiater.models import Psikiater, Jadwal
 
 # Create your models here.
 
@@ -20,6 +20,7 @@ class PasienManager(models.Manager):
             role='patient'
         )
         return Pasien
+    
 class Pasien(User):
     objects = PasienManager()
 
@@ -48,7 +49,7 @@ class PesananKonsultasi(models.Model):
     ]
 
     pasien = models.CharField(max_length=255)
-    jadwal_konsultasi = models.ForeignKey('psikiater.JadwalKonsultasi', on_delete=models.CASCADE)
+    jadwal_konsultasi = models.ForeignKey(Jadwal, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=9,
         choices=STATUS_KONSULTASI_CHOICES,
@@ -73,7 +74,7 @@ class Pembayaran(models.Model):
         (RETAIL, "Gerai Retail"),
     ]
 
-    pasien = models.ForeignKey(Pasien, on_delete=models.CASCADE)
+    pesanan = models.ForeignKey(PesananKonsultasi, on_delete=models.CASCADE)
     biayaPembayaran = models.FloatField()
     metodePembayaran = models.CharField(
         max_length=7,
