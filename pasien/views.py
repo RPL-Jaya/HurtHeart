@@ -3,14 +3,10 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
 
-from .models import Pasien, Ulasan, PesananKonsultasi
-from .forms import UlasanForm, PembayaranForm
+from .models import Pasien, Ulasan
+from .forms import UlasanForm
 
 from psikiater.models import Psikiater
-
-from django.views.decorators.csrf import csrf_exempt
-from django.core import serializers
-from rest_framework.decorators import api_view
 
 # Create your views here.
 
@@ -42,20 +38,3 @@ def buat_ulasan_api(request):
             return JsonResponse({'message': 'Ulasan berhasil dibuat'})
 
     return JsonResponse({'message': 'Ulasan gagal dibuat'})
-
-@api_view(['GET', 'POST'])
-@csrf_exempt
-def pesanan_konsultasi_pasien(request):
-    if request.method == 'GET':
-        pesanan_konsultasi = PesananKonsultasi.objects.all()
-        serialized_data = serializers.serialize('json', pesanan_konsultasi)
-        return JsonResponse({'pesanan_konsultasi': serialized_data}, safe=False)
-
-    elif request.method == 'POST':
-        data = request.data
-        pesanan_konsultasi = PesananKonsultasi.objects.create(
-            pasien=data['pasien'],
-            jadwal_konsultasi_id=data['jadwal_konsultasi_id'],
-        )
-        serialized_data = serializers.serialize('json', [pesanan_konsultasi])
-        return JsonResponse({'pesanan_konsultasi': serialized_data}, safe=False)
