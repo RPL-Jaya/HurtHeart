@@ -62,13 +62,21 @@ def pesanan_konsultasi_pasien(request):
 @login_required(login_url='/login/')
 def buat_pesanan(request):
     form = PesananForm()
+    data_psikiater = Psikiater.objects.all()
+
     if request.method == "POST":
-        form = PesananForm(request.POST)
+        pasien = request.user
+        jadwal_konsultasi = request.POST.get('jadwal', '')
+
+        form_data = {
+            'user'
+        }
+        form = PesananForm()
         if form.is_valid():
             pesanan = form.save()
             return render(request, 'pesanan_konsultasi.html')
         
-    context = {'form': form}
+    context = {'form': form, 'dataPsikiater': data_psikiater}
     return render(request, 'buat_pesanan.html', context)
 
 @login_required(login_url='/login/')
