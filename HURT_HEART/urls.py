@@ -25,7 +25,7 @@ urlpatterns = [
     path("",include("authentication.urls")),
     path("",include("psikiater.urls")),
     path("",include("pasien.urls")),
-    path("",include("admin.urls")),
+    path("",include("adminhurt.urls")),
 ]
 
 if settings.DEBUG:
