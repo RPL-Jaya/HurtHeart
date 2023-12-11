@@ -66,8 +66,8 @@ def buat_pesanan(request):
 
     if request.method == "POST":
         pasien = request.user
-        jadwal_konsultasi = request.POST.get('jadwal', '')
-
+        nama_psikiater = request.POST.get('psikiater')
+        
         form_data = {
             'user'
         }

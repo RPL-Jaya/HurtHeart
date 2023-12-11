@@ -15,4 +15,4 @@ class PembayaranForm(ModelForm):
 class PesananForm(ModelForm):
     class Meta:
         model = PesananKonsultasi
-        fields = ('jadwal_konsultasi')
+        fields = ('jadwal_konsultasi',)
