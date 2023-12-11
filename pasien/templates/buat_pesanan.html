@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block meta %}
@@ -5,7 +6,7 @@
 {% endblock meta %}
 
 {% block content %}
-    <form method="post">
+    <form method="post" id="buatPesananForm">
         <div class="mb-3">
             <label for="psikiaterSelect">Psikiater:</label>
             <select id="psikiaterSelect" name="psikiater" required>
@@ -15,12 +16,25 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="mb-3">
-            {% csrf_token %}
+        {% csrf_token %}
+        <!-- Remove Jadwal konsultasi section -->
+        <!-- <div class="mb-3">
             {{ form.as_table }}
-        </div>
+        </div> -->
         <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Buat Pesanan</button>
+            <button type="button" class="btn btn-primary" onclick="redirectLihatJadwal()">Lihat Jadwal Psikiater</button>
         </div>
     </form>
+
+    <!-- Your JavaScript to handle the redirect -->
+    <script>
+        function redirectLihatJadwal() {
+            var selectedPsikiaterId = document.getElementById("psikiaterSelect").value;
+            if (selectedPsikiaterId) {
+                window.location.href = `/lihat-jadwal-psikiater/${selectedPsikiaterId}`;
+            } 
+        }
+    </script>
 {% endblock %}
+
+

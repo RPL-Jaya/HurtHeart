@@ -1,0 +1,26 @@
+<!-- di lihat_jadwal_psikiater.html -->
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Jadwal Psikiater</title>
+{% endblock meta %}
+
+{% block content %}
+    <h1>Jadwal Psikiater: {{ selected_psikiater.first_name }} {{ selected_psikiater.last_name }}</h1>
+    
+    {% if jadwal_objects %}
+        <ul>
+            {% for jadwal in jadwal_objects %}
+                <li>
+                    Tanggal: {{ jadwal.tanggal }}<br>
+                    Jam Mulai: {{ jadwal.jam_mulai }}<br>
+                    Jam Selesai: {{ jadwal.jam_selesai }}<br>
+                    Metode: {{ jadwal.metode }}<br>
+                    Keterangan: {{ jadwal.keterangan }}<br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Tidak ada jadwal tersedia untuk psikiater ini.</p>
+    {% endif %}
+{% endblock %}

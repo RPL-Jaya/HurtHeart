@@ -11,6 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -71,15 +74,26 @@ def buat_pesanan(request):
         nama_psikiater = request.POST.get('psikiater')
         
         form_data = {
-            'user'
+            'user': pasien,
+            # Add other form fields here as needed
         }
-        form = PesananForm()
+        
+        form = PesananForm(form_data)
         if form.is_valid():
             pesanan = form.save()
-            return render(request, 'pesanan_konsultasi.html')
+            return redirect('pasien:lihat_jadwal_psikiater', psikiater_id=pasien.username)
         
     context = {'form': form, 'dataPsikiater': data_psikiater}
     return render(request, 'buat_pesanan.html', context)
+
+def lihat_jadwal_psikiater(request, psikiater_id):
+    if request.method == "GET":
+        # psikiater_id = request.GET.get('psikiater_id')
+        psikiater = User.objects.get(username=psikiater_id)
+        jadwal_objects = Jadwal.objects.filter(psikiater=psikiater)
+
+        context = {'jadwal_objects': jadwal_objects, 'selected_psikiater': psikiater}
+        return render(request, 'lihat_jadwal_psikiater.html', {'psikiater_id': psikiater_id})
 
 @login_required(login_url='/login/')
 def liat_pesanan(request):
