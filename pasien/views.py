@@ -20,7 +20,7 @@ def buat_ulasan(request):
         form = UlasanForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('psikiater:psikiater_detail', username=form.cleaned_data['psikiater'])
+            return redirect('psikiater:psikiater_detail', username=form.cleaned_data['namaPsikiater'])
 
     pasien = Pasien.objects.all()
     psikiater = Psikiater.objects.all()

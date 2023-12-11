@@ -22,7 +22,7 @@ def register(request):
             if form.cleaned_data["role"] == "psychiatrist":
                 Psikiater.objects.create(user=user)
                 print(Psikiater.objects.all())
-            elif form.changed_data["role"] == "patient":
+            elif form.cleaned_data["role"] == "patient":
                 Pasien.objects.create(user=user)
                 print(Pasien.objects.all())
             else:
@@ -41,9 +41,10 @@ def login_user(request):
         password = request.POST.get('password')
         print(request.POST)
         user = authenticate(request, username=username, password=password)
-        print(user)
         if user is not None:
             login(request, user)
+            if user.role == "psychiatrist":
+                return redirect("/liat-jadwal")
             return redirect('authentication:test')
         else:
             messages.info(request, 'Username atau Password salah!')
@@ -52,7 +53,7 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return render(request, 'login.html')
+    return redirect("/")
 
 def test(request):
     print(User.objects.all())
