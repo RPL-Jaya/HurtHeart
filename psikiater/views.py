@@ -62,4 +62,5 @@ def jadwal_konsultasi_psikiater(request):
     context = {'form': form, 'jadwal_konsultasi_list': jadwal_konsultasi_list}
     return render(request, 'jadwal_konsultasi.html', context)
 
+
     

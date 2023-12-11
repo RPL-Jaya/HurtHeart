@@ -48,13 +48,10 @@ def pesanan_konsultasi_pasien(request):
         form = PesananKonsultasiForm(request.POST)
         if form.is_valid():
             pesanan_konsultasi = form.save(commit=False)
-            # If you have a specific JadwalKonsultasi instance to associate, replace the next line
-            # For example, you might want to get the first JadwalKonsultasi in the database
             pesanan_konsultasi.jadwal_konsultasi = JadwalKonsultasi.objects.first()
             pesanan_konsultasi.save()
             return redirect('pasien:pesanan-list-pasien')
 
-    # If it's a GET request or the form is not valid, render the template with the form
     form = PesananKonsultasiForm()
     pesanan_konsultasi = PesananKonsultasi.objects.all()
     return render(request, 'pesanan_konsultasi_pasien.html', {'form': form, 'pesanan_konsultasi': pesanan_konsultasi})

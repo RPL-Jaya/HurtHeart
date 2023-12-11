@@ -48,4 +48,3 @@ class JadwalKonsultasi(models.Model):
 
     def __str__(self):
         return f"{self.psikiater.user.username} - {self.jadwal_konsultasi}"
-
