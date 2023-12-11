@@ -21,16 +21,15 @@ class PsikiaterManager(models.Manager):
             role='psychiatrist',
             kualifikasi=data['kualifikasi'],
             ulasanKonsultasi=data['ulasanKonsultasi'],
-            jadwalKonsultasi=data['jadwalKonsultasi'],
         )
         return psikiater
-class Psikiater(User):
-    objects = PsikiaterManager()
+    
+class Psikiater(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     kualifikasi = models.BooleanField(default=False)
     ulasanKonsultasi = models.TextField(default="")
-    jadwalKonsultasi = models.DateTimeField(auto_now_add=True)
 
-    REQUIRED_FIELDS = ['kualifikasi', 'ulasanKonsultasi', 'jadwalKonsultasi']
+    REQUIRED_FIELDS = ['kualifikasi', 'ulasanKonsultasi']
 
 class Jadwal(models.Model):
     psikiater = models.ForeignKey(User, on_delete=models.CASCADE)
