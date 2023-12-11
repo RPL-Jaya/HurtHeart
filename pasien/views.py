@@ -100,4 +100,4 @@ def buat_pembayaran(request):
             return render(request, 'pembayaran.html', context)
         
     context = {'form': form}
-    return render(request, context)
+    return render(request, 'pembayaran.html', context)
