@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, logout
 from .forms import RegisterForm
 from .models import User
 import sys
@@ -19,16 +19,6 @@ def register(request):
             user = form.save()
             user.set_password(request.POST.get('password'))
             user.save()
-            if form.cleaned_data["role"] == "psychiatrist":
-                Psikiater.objects.create(user=user)
-                print(Psikiater.objects.all())
-            elif form.cleaned_data["role"] == "patient":
-                Pasien.objects.create(user=user)
-                print(Pasien.objects.all())
-            else:
-                user.is_superuser = True
-                user.is_staff = True
-                user.save()
             messages.success(request, 'Akun telah berhasil dibuat!')
             return redirect('authentication:login')
         print(form.errors)
@@ -54,7 +44,6 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect("/")
-
 def test(request):
     print(User.objects.all())
     return render(request, "test.html")

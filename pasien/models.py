@@ -33,6 +33,16 @@ class Ulasan(models.Model):
     tanggalKonsultasi = models.DateField()
     namaPsikiater = models.CharField(max_length=100)
 
+# class Pesanan(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pesanan_user')
+#     psikiater = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pesanan_psikiater')
+#     tanggal_pesan = models.DateField()
+#     waktu_mulai = models.TimeField()
+#     waktu_selesai = models.TimeField()
+
+#     def __str__(self):
+#         return f'{self.user.username} - {self.psikiater.username} - {self.tanggal_pesan}'
+
 class PesananKonsultasi(models.Model):
     BAYAR = "bayar"
     VERIFY = "verify"

@@ -12,7 +12,11 @@ class PembayaranForm(ModelForm):
         model = Pembayaran
         exclude = ['pasien', 'biayaPembayaran', 'statusPembayaran']
 
-class PesananForm(ModelForm):
+class PesananForm(forms.ModelForm):
     class Meta:
         model = PesananKonsultasi
-        fields = ('jadwal_konsultasi',)
+        fields = ['jadwal_konsultasi']
+        # Add the 'psikiater' field
+        widgets = {
+            'psikiater': forms.Select(),
+        }
