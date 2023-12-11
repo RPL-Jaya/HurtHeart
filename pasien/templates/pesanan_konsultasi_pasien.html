@@ -1,37 +1,38 @@
-<!-- pasien/templates/pesanan_konsultasi_pasien.html -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesanan Konsultasi Pasien</title>
-</head>
-<body>
-    <h1>Pesanan Konsultasi Pasien</h1>
+{% block content %}
+    <div class="container">
+        <h1 class="my-4">Pesanan Konsultasi Pasien</h1>
 
-    <!-- Formulir untuk menambahkan pesanan konsultasi -->
-    <form method="post" action="{% url 'pasien:pesanan-list-pasien' %}">
-        {% csrf_token %}
-        <label for="pasien">Pasien:</label>
-        <input type="text" name="pasien" required><br>
-        <label for="jadwal_konsultasi_id">ID Jadwal Konsultasi:</label>
-        <input type="text" name="jadwal_konsultasi_id" required><br>
-        <input type="submit" value="Pesan Konsultasi">
-    </form>
+        <!-- Formulir untuk menambahkan pesanan konsultasi -->
+        <form method="post" action="{% url 'pasien:pesanan-list-pasien' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="pasien" class="form-label">Pasien:</label>
+                <input type="text" name="pasien" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="jadwal_konsultasi_id" class="form-label">ID Jadwal Konsultasi:</label>
+                <input type="text" name="jadwal_konsultasi_id" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Pesan Konsultasi</button>
+        </form>
 
-    <!-- Daftar pesanan konsultasi -->
-    {% if pesanan_konsultasi %}
-        <h2>Daftar Pesanan Konsultasi</h2>
-        <ul>
-            {% for pesanan in pesanan_konsultasi %}
-                <li>
-                    Pasien: {{ pesanan.pasien }} - Jadwal Konsultasi: {{ pesanan.jadwal_konsultasi }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Tidak ada pesanan konsultasi tersedia.</p>
-    {% endif %}
-</body>
-</html>
+        <!-- Daftar pesanan konsultasi -->
+        {% if pesanan_konsultasi %}
+            <h2 class="mt-4">Daftar Pesanan Konsultasi</h2>
+            <ul class="list-group">
+                {% for pesanan in pesanan_konsultasi %}
+                    <li class="list-group-item">
+                        <strong>Pasien:</strong> {{ pesanan.pasien }}<br>
+                        <strong>Jadwal Konsultasi:</strong> {{ pesanan.jadwal_konsultasi }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="mt-4">Tidak ada pesanan konsultasi tersedia.</p>
+        {% endif %}
+    </div>
+{% endblock content %}
+
+

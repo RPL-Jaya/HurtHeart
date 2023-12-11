@@ -7,15 +7,19 @@ from .forms import RegisterForm
 # Create your views here.
 
 def register(request):
-    print(request)
     form = RegisterForm()
-    print(form)
     if request.method == "POST":
-        print(request.POST)
         form = RegisterForm(request.POST)
-        print(form.data)
         if form.is_valid():
             user = form.save()
+            Profile.objects.create(
+                username=user,
+                email=user.email,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                date_of_birth=user.date_of_birth,
+                role=user.role
+            )
             user.set_password(request.POST.get('password'))
             user.save()
             messages.success(request, 'Akun telah berhasil dibuat!')

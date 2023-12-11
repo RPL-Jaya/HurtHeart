@@ -4,7 +4,7 @@ from django.http import JsonResponse
 
 
 from .models import Pasien, Ulasan, PesananKonsultasi
-from .forms import UlasanForm
+from .forms import UlasanForm, PesananKonsultasiForm
 
 from psikiater.models import Psikiater
 
@@ -43,19 +43,18 @@ def buat_ulasan_api(request):
 
     return JsonResponse({'message': 'Ulasan gagal dibuat'})
 
-@api_view(['GET', 'POST'])
-@csrf_exempt
 def pesanan_konsultasi_pasien(request):
-    if request.method == 'GET':
-        pesanan_konsultasi = PesananKonsultasi.objects.all()
-        serialized_data = serializers.serialize('json', pesanan_konsultasi)
-        return JsonResponse({'pesanan_konsultasi': serialized_data}, safe=False)
+    if request.method == 'POST':
+        form = PesananKonsultasiForm(request.POST)
+        if form.is_valid():
+            pesanan_konsultasi = form.save(commit=False)
+            # If you have a specific JadwalKonsultasi instance to associate, replace the next line
+            # For example, you might want to get the first JadwalKonsultasi in the database
+            pesanan_konsultasi.jadwal_konsultasi = JadwalKonsultasi.objects.first()
+            pesanan_konsultasi.save()
+            return redirect('pasien:pesanan-list-pasien')
 
-    elif request.method == 'POST':
-        data = request.data
-        pesanan_konsultasi = PesananKonsultasi.objects.create(
-            pasien=data['pasien'],
-            jadwal_konsultasi_id=data['jadwal_konsultasi_id'],
-        )
-        serialized_data = serializers.serialize('json', [pesanan_konsultasi])
-        return JsonResponse({'pesanan_konsultasi': serialized_data}, safe=False)
+    # If it's a GET request or the form is not valid, render the template with the form
+    form = PesananKonsultasiForm()
+    pesanan_konsultasi = PesananKonsultasi.objects.all()
+    return render(request, 'pesanan_konsultasi_pasien.html', {'form': form, 'pesanan_konsultasi': pesanan_konsultasi})

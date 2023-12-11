@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+from .forms import JadwalKonsultasiForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -42,22 +44,22 @@ def psikiater_list_api(request):
     # Return psikiater list in JSON format
     return JsonResponse(context)
 
-@api_view(['GET', 'POST'])
-@csrf_exempt
-def jadwal_konsultasi_list_create(request):
-    if request.method == 'GET':
-        jadwal_konsultasi = JadwalKonsultasi.objects.all()
-        serialized_data = serializers.serialize('json', jadwal_konsultasi)
-        return JsonResponse({'jadwal_konsultasi': serialized_data}, safe=False)
+@login_required
+def jadwal_konsultasi_psikiater(request):
+    if request.user.role != 'psychiatrist':
+        return redirect('authentication:login')
+    if request.method == 'POST':
+        form = JadwalKonsultasiForm(request.POST)
+        if form.is_valid():
+            jadwal_konsultasi = form.save(commit=False)
+            jadwal_konsultasi.psikiater = request.user
+            jadwal_konsultasi.save()
+            return redirect('psikiater:jadwal_konsultasi_psikiater')
+    else:
+        form = JadwalKonsultasiForm()
 
-    elif request.method == 'POST':
-        data = request.data
-        jadwal_konsultasi = JadwalKonsultasi.objects.create(
-            psikiater=data['psikiater'],
-            tanggal=data['tanggal'],
-            ketersediaan=data['ketersediaan'],
-        )
-        serialized_data = serializers.serialize('json', [jadwal_konsultasi])
-        return JsonResponse({'jadwal_konsultasi': serialized_data}, safe=False)
-    
+    jadwal_konsultasi_list = JadwalKonsultasi.objects.filter(psikiater=request.user)
+    context = {'form': form, 'jadwal_konsultasi_list': jadwal_konsultasi_list}
+    return render(request, 'jadwal_konsultasi.html', context)
+
     
