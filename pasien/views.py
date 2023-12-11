@@ -83,7 +83,7 @@ def buat_pesanan(request):
 @login_required(login_url='/login/')
 def liat_pesanan(request):
     pesanan = PesananKonsultasi.objects.filter(pasien=request.user)
-    return render(request, 'pesanan_konsultasi.html', {'pesanan': pesanan})
+    return render(request, 'pesanan_konsultasi.html', {'list_pesanan': pesanan})
 
 def buat_pembayaran(request):
     form = PembayaranForm()
