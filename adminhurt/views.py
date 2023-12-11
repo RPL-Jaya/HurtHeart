@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from pasien.models import Pembayaran
+from pasien.models import Pembayaran, PesananKonsultasi
+from psikiater.models import Jadwal
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -23,3 +24,15 @@ def payment_verification(request,pk):
         }
     # render page
     return render(request,"admin/payment_verification.html",context)
+
+# create view for reading Pembayaran model
+@login_required(login_url='/login/')
+def read_payment(request):
+    # get all payment data
+    payment = Pembayaran.objects.all()
+    # create context
+    context = {
+        "payment":payment,
+    }
+    # render page
+    return render(request,"read-payment.html",context)
