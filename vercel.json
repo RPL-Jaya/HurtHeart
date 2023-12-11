@@ -1,14 +1,14 @@
 {
     "builds": [
       {
-        "src": "HurtHeart/wsgi.py",
+        "src": "HURT_HEART/wsgi.py",
         "use": "@vercel/python"
       }
     ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "HurtHeart/wsgi.py"
+        "dest": "HURT_HEART/wsgi.py"
       }
     ]
 }
