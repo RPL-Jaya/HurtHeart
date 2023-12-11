@@ -5,19 +5,19 @@
     {% csrf_token %}
     <div class="mb-3">
         <label for="tanggal" class="form-label">Tanggal:</label>
-        <input type="date" class="form-control" id="tanggal" name="tanggal"/>
+        <input type="date" class="form-control" id="tanggal" name="tanggal" required/>
       </div>
       <div class="mb-3">
         <label for="jam_mulai" class="form-label">Jam mulai:</label>
-        <input type="time" class="form-control" id="jam_mulai" name="jam_mulai"/>
+        <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" required/>
       </div>
     <div class="mb-3">
       <label for="jam_selesai" class="form-label">Jam selesai:</label>
-      <input type="time" class="form-control" id="jam_selesai"  name="jam_selesai"/>
+      <input type="time" class="form-control" id="jam_selesai"  name="jam_selesai" required/>
     </div>
     <div class = "mb-3">
         <label for="metode" class="form-label">Metode:</label>
-        <select class="form-select" aria-label="Default select example" id="metode" name="metode">
+        <select class="form-select" aria-label="Default select example" id="metode" name="metode" required>
             <option selected>Open this select menu</option>
             <option value="luring">Luring</option>
             <option value="daring">Daring</option>
@@ -25,13 +25,16 @@
     </div>
     <div class="mb-3">
       <label for="keterangan" class="keterangan">Keterangan:</label>
-      <input type="text" class="form-control" id="keterangan" name="keterangan" value="-"/>
+      <input type="text" class="form-control" id="keterangan" name="keterangan" value="-" required/>
     </div>
     <div class="mb-3">
         <label class="form-label" for="kuota_total">Kuota total:</label>
-        <input class="form-control" type="number" id="kuota_total" name="kuota_total"> 
+        <input class="form-control" type="number" id="kuota_total" name="kuota_total" required> 
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="container text-center">
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+    </div>
+    
 </form>
 </div>
 
