@@ -1,7 +1,6 @@
 from django.forms import ModelForm
 from .models import Ulasan, Pembayaran, PesananKonsultasi
 from django import forms
-from psikiater.models import JadwalKonsultasi 
 
 class UlasanForm(ModelForm):
     class Meta:
