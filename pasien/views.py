@@ -10,7 +10,6 @@ from authentication.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
-from rest_framework.decorators import api_view
 
 # Create your views here.
 
