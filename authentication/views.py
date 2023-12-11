@@ -17,6 +17,14 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            Profile.objects.create(
+                username=user,
+                email=user.email,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                date_of_birth=user.date_of_birth,
+                role=user.role
+            )
             user.set_password(request.POST.get('password'))
             user.save()
             if form.cleaned_data["role"] == "psychiatrist":
