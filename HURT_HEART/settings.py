@@ -79,11 +79,14 @@ WSGI_APPLICATION = 'HURT_HEART.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': 'db.wsjsxjnuapgxpuljlhxq.supabase.co',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PORT': '5432',
+        'PASSWORD': 'RPL-JAYA-HURTHEART',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
