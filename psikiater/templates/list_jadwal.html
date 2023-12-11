@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container col-md-5">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Tanggal</th>
+        <th scope="col">Jam Mulai</th>
+        <th scope="col">Jam Selesai</th>
+        <th scope="col">Metode</th>
+        <th scope="col">Keterangan</th>
+        <th scope="col">Kuota Total</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for jadwal in list_jadwal %}
+      <tr>
+        <td>{{jadwal.tanggal}}</td>
+        <td>{{jadwal.jam_mulai}}</td>
+        <td>{{jadwal.jam_selesai}}</td>
+        <td>{{jadwal.metode}}</td>
+        <td>{{jadwal.keterangan}}</td>
+        <td>{{jadwal.kuota_total}}</td>
+        
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

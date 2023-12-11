@@ -63,3 +63,6 @@ def add_jadwal(request):
 @login_required(login_url='/login/')
 def liat_jadwal(request):
     jadwal = Jadwal.objects.filter(psikiater = request.user)
+    print(jadwal)
+    context = {"list_jadwal": jadwal}
+    return render(request, "list_jadwal.html", context)
