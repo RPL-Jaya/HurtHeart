@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .forms import RegisterForm
+from .models import User
+import sys
+sys.path.append("..")
+from psikiater.models import Psikiater
+from pasien.models import Pasien
 
 # Create your views here.
 
@@ -12,16 +17,18 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(
-                username=user,
-                email=user.email,
-                first_name=user.first_name,
-                last_name=user.last_name,
-                date_of_birth=user.date_of_birth,
-                role=user.role
-            )
             user.set_password(request.POST.get('password'))
             user.save()
+            if form.cleaned_data["role"] == "psychiatrist":
+                Psikiater.objects.create(user=user)
+                print(Psikiater.objects.all())
+            elif form.changed_data["role"] == "patient":
+                Pasien.objects.create(user=user)
+                print(Pasien.objects.all())
+            else:
+                user.is_superuser = True
+                user.is_staff = True
+                user.save()
             messages.success(request, 'Akun telah berhasil dibuat!')
             return redirect('authentication:login')
         print(form.errors)
@@ -43,5 +50,13 @@ def login_user(request):
     context = {}
     return render(request, 'login.html', context)
 
+def logout_user(request):
+    logout(request)
+    return render(request, 'login.html')
+
 def test(request):
+    print(User.objects.all())
     return render(request, "test.html")
+
+def home(request):
+    return render(request, "home.html")
