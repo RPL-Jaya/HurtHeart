@@ -1,0 +1,45 @@
+<!-- templates/psikiater/jadwal_konsultasi_psikiater.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="my-4">Jadwal Konsultasi Psikiater</h1>
+
+        <!-- Formulir Jadwal Konsultasi Psikiater -->
+        <form method="post" action="{% url 'psikiater:jadwal_konsultasi_psikiater' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.psikiater.label_tag }}
+                {{ form.psikiater }}
+            </div>
+            <div class="mb-3">
+                {{ form.jadwal_konsultasi.label_tag }}
+                {{ form.jadwal_konsultasi }}
+            </div>
+            <input type="submit" class="btn btn-primary" value="Tambah Jadwal Konsultasi">
+        </form>
+
+        <!-- Daftar Jadwal Konsultasi -->
+        {% if jadwal_konsultasi_list %}
+            <h2 class="mt-4">Daftar Jadwal Konsultasi</h2>
+            <ul class="list-group">
+                {% for jadwal_konsultasi in jadwal_konsultasi_list %}
+                    <li class="list-group-item">
+                        <strong>Nama Psikiater:</strong> {{ jadwal_konsultasi.psikiater.user.username }}<br>
+                        <strong>Jadwal Konsultasi:</strong> {{ jadwal_konsultasi.jadwal_konsultasi }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="mt-4">Tidak ada jadwal konsultasi.</p>
+        {% endif %}
+    </div>
+{% endblock content %}
+
+
+
+
+
+
+
+

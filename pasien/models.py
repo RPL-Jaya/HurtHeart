@@ -21,8 +21,8 @@ class PasienManager(models.Manager):
         )
         return Pasien
     
-class Pasien(User):
-    objects = PasienManager()
+class Pasien(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
 
 class Ulasan(models.Model):
@@ -48,7 +48,7 @@ class PesananKonsultasi(models.Model):
         (DONE, "Selesai")
     ]
 
-    pasien = models.CharField(max_length=255)
+    pasien = models.ForeignKey(User, on_delete=models.CASCADE)
     jadwal_konsultasi = models.ForeignKey(Jadwal, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=9,

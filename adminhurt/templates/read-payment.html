@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block meta %}
+<link rel="stylesheet" />
+<style>
+  table,
+  th,
+  td {
+    text-align: center;
+  }
+  .table {
+    margin: 0 auto;
+    width: 80%;
+  }
+ 
+</style>
+<title>Pembayaran</title>
+{% endblock meta %}
+
+{% block content %}
+
+<h1>List Pembayaran</h1>
+<br />
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Jumlah</th>
+                <th>Metode</th>
+                <th>Status</th>
+                <th></th>
+                <!-- Add more table headers for other fields in the Pembayaran model -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Use a loop to iterate over the Pembayaran model objects and display their contents -->
+            {% for pembayaran in pembayaran_list %}
+            <tr>
+                <td>{{ pembayaran.pesanan }}</td>
+                <td>{{ pembayaran.biayaPembayaran }}</td>
+                <td>{{ pembayaran.metodePembayaran }}</td>
+                <td>{{ pembayaran.statusPembayaran }}</td>
+                <td><a href="{{pembayaran.pesanan}}">Detail</a></td>
+                <!-- Add more table cells for other fields in the Pembayaran model -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock content %}

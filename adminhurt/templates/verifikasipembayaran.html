@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block meta %}
+<title>Pembayaran</title>
+{% endblock meta %}
+
+{% block content %}
+
+<h1>Pembayaran {{payment.pesanan}}</h1>
+<!-- add the detail for payment -->
+<br />
+<h1>Detail Pembayaran</h1>
+<h1>ID Pesanan: {{payment.pesanan}}</h1>
+<h1>Jumlah: {{payment.biayaPembayaran}}</h1>
+<h1>Metode Pembayaran: {{payment.metodePembayaran}}</h1>
+<h1>Status Pembayaran: {{payment.statusPembayaran}}</h1>
+<h1>Bukti Pembayaran: {{payment.buktiPembayaran}}</h1>
+
+<!-- add button to accept or reject -->
+<button type="submit" name="btn-accept">Accept</button>
+<button type="submit" name="btn-reject">Reject</button>
+
+<br />
+
+{% endblock content %}
