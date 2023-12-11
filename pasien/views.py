@@ -26,7 +26,7 @@ def buat_ulasan(request):
         form = UlasanForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('psikiater:psikiater_detail', username=form.cleaned_data['psikiater'])
+            return redirect('psikiater:psikiater_detail', username=form.cleaned_data['namaPsikiater'])
 
     pasien = Pasien.objects.all()
     psikiater = Psikiater.objects.all()
@@ -98,7 +98,7 @@ def lihat_jadwal_psikiater(request, psikiater_id):
 @login_required(login_url='/login/')
 def liat_pesanan(request):
     pesanan = PesananKonsultasi.objects.filter(pasien=request.user)
-    return render(request, 'pesanan_konsultasi.html', {'pesanan': pesanan})
+    return render(request, 'pesanan_konsultasi.html', {'list_pesanan': pesanan})
 
 def buat_pembayaran(request):
     form = PembayaranForm()
@@ -115,4 +115,4 @@ def buat_pembayaran(request):
             return render(request, 'pembayaran.html', context)
         
     context = {'form': form}
-    return render(request, context)
+    return render(request, 'pembayaran.html', context)

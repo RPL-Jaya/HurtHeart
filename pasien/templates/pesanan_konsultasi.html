@@ -4,18 +4,45 @@
 {% block content %}
 
 <!-- Daftar pesanan konsultasi -->
-{% if pesanan %}
+<div class="container col-md-7 align-items-center text-center">
+    {% if pesanan %}
     <h2>Daftar Pesanan Konsultasi</h2>
-    <ul>
-        {% for pesan in pesanan %}
-            <li>
-                Jadwal Konsultasi: {{ pesan.jadwal_konsultasi }}
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>Tidak ada pesanan konsultasi tersedia.</p>
-{% endif %}
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Nama Psikiater</th>
+            <th scope="col">Jam Mulai</th>
+            <th scope="col">Jam Selesai</th>
+            <th scope="col">Metode</th>
+            <th scope="col">Keterangan</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for pesanan in list_pesanan %}
+            <tr>
+            <td>{{pesanan.jadwal_konsultasi.psikiater}}</td>
+            <td>{{pesanan.jadwal_konsultasi.jam_mulai}}</td>
+            <td>{{pesanan.jadwal_konsultasi.jam_selesai}}</td>
+            <td>{{pesanan.jadwal_konsultasi.metode}}</td>
+            <td>{{pesanan.jadwal_konsultasi.keterangan}}</td>
+            {% if pesanan.status == 'BAYAR' %}
+            <td>
+                <a type="button" class="btn btn-outline-danger btn-sm justify-content-center" href="/pembayaran/">Belum Dibayar</a>
+            </td>
+            {% else %}
+            <td>{{pesanan.status}}</td>
+            {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Tidak ada pesanan konsultasi tersedia.</p>
+        <a type="button" class="btn btn-outline-primary btn-lg btn-block justify-content-center" href="/buat-pesanan/">Pesan Konsultasi</a>
+    {% endif %}
+</div>
+
 
 
 {% endblock %}
