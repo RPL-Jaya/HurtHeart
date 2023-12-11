@@ -46,14 +46,12 @@ class Ulasan(models.Model):
 class PesananKonsultasi(models.Model):
     BAYAR = "bayar"
     VERIFY = "verify"
-    PENDING = "pending"
     SCHED = "scheduled"
     DONE = "done"
     
     STATUS_KONSULTASI_CHOICES = [
         (BAYAR, "Menunggu Pembayaran"),
         (VERIFY, "Menunggu Verifikasi Admin"),
-        (PENDING, "Menunggu Konfirmasi Psikiater"),
         (SCHED, "Konsultasi Terjadwal"),
         (DONE, "Selesai")
     ]
@@ -85,12 +83,10 @@ class Pembayaran(models.Model):
     ]
 
     pesanan = models.ForeignKey(PesananKonsultasi, on_delete=models.CASCADE)
-    biayaPembayaran = models.FloatField()
     metodePembayaran = models.CharField(
         max_length=7,
         choices=METODE_PEMBAYARAN_CHOICE,
     )
-    buktiPembayaran = models.ImageField(upload_to='images')
+    byte_image = models.TextField(blank=True)
     statusPembayaran = models.BooleanField(default=False)
     # timestamp = models.DateTimeField()
-

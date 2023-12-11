@@ -8,9 +8,10 @@ class UlasanForm(ModelForm):
         fields = ('pasien', 'psikiater', 'komentar', 'rating', 'tanggalKonsultasi', 'namaPsikiater')
 
 class PembayaranForm(ModelForm):
+    byte_image = forms.FileField()
     class Meta:
         model = Pembayaran
-        exclude = ['pasien', 'biayaPembayaran', 'statusPembayaran']
+        fields = ['metodePembayaran']
 
 class PesananForm(forms.ModelForm):
     class Meta:

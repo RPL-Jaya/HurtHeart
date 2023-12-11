@@ -6,8 +6,8 @@ from .forms import RegisterForm
 from .models import User
 import sys
 sys.path.append("..")
-from psikiater.models import Psikiater
-from pasien.models import Pasien
+from psikiater.models import Psikiater, Jadwal
+from pasien.models import Pasien, Ulasan, PesananKonsultasi, Pembayaran
 
 # Create your views here.
 
@@ -35,6 +35,8 @@ def login_user(request):
             login(request, user)
             if user.role == "psychiatrist":
                 return redirect("/liat-jadwal")
+            elif user.role == "patient":
+                return redirect("/pesanan")
             return redirect('authentication:test')
         else:
             messages.info(request, 'Username atau Password salah!')
@@ -44,9 +46,20 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect("/")
+
 def test(request):
     print(User.objects.all())
     return render(request, "test.html")
 
 def home(request):
     return render(request, "home.html")
+
+def clear_data(request):
+    User.objects.all().delete()
+    Psikiater.objects.all().delete()
+    Jadwal.objects.all().delete()
+    Pasien.objects.all().delete()
+    Ulasan.objects.all().delete()
+    PesananKonsultasi.objects.all().delete()
+    Pembayaran.objects.all().delete()
+    return render(request, "test.html")
