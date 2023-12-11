@@ -13,7 +13,7 @@ from authentication.models import User
 # Profile View
 def psikiater_detail(request, username):
     # Get psikiater by id
-    psikiater = Psikiater.objects.get(username=username)
+    psikiater = Psikiater.objects.get(user=User.objects.get(username=username))
     ulasan = Ulasan.objects.filter(psikiater=psikiater)
     context = {'psikiater': psikiater, 'ulasan_list': ulasan}
     return render(request, 'profile.html', context)
