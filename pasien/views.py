@@ -6,6 +6,7 @@ from .models import Pasien, Ulasan, PesananKonsultasi
 from .forms import UlasanForm, PesananForm, PembayaranForm
 
 from psikiater.models import Psikiater, Jadwal
+from authentication.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
@@ -62,7 +63,7 @@ def pesanan_konsultasi_pasien(request):
 @login_required(login_url='/login/')
 def buat_pesanan(request):
     form = PesananForm()
-    data_psikiater = Psikiater.objects.all()
+    data_psikiater = User.objects.filter(role='psychiatrist')
 
     if request.method == "POST":
         pasien = request.user
