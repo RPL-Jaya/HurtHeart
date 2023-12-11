@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container col-md-7 align-items-center text-center">
+  {% if list_jadwal|length == 0 %}
+  <h1 class="fw-bold mb-3">Psikiater belum memiliki jadwal</h1>
+  {% else %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Tanggal</th>
+        <th scope="col">Jam Mulai</th>
+        <th scope="col">Jam Selesai</th>
+        <th scope="col">Metode</th>
+        <th scope="col">Keterangan</th>
+        <th scope="col">Kuota Total</th>
+        <th scope="col">Kuota Tersedia</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for jadwal in list_jadwal %}
+      <tr>
+        <td>{{jadwal.tanggal}}</td>
+        <td>{{jadwal.jam_mulai}}</td>
+        <td>{{jadwal.jam_selesai}}</td>
+        <td>{{jadwal.metode}}</td>
+        <td>{{jadwal.keterangan}}</td>
+        <td>{{jadwal.kuota_total}}</td>
+        <td>{{jadwal.kuota_tersedia}}</td>
+        
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  <a type="button" class="btn btn-outline-primary btn-lg btn-block justify-content-center" href="/add-jadwal/">Tambah Jadwal</a>
+</div>
+{% endblock %}

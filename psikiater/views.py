@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Psikiater, Jadwal
 from pasien.models import Ulasan
 from django.http import JsonResponse
@@ -55,6 +55,7 @@ def add_jadwal(request):
             kuota_total = form.cleaned_data["kuota_total"]
             Jadwal.objects.create(psikiater = request.user,tanggal = tanggal, jam_mulai = jam_mulai, jam_selesai = jam_selesai, metode = metode, keterangan = keterangan, kuota_total = kuota_total, kuota_tersedia = kuota_total)
             print("saved")
+            return redirect("/liat-jadwal")
             
     
     context = {"form":form}
@@ -63,3 +64,6 @@ def add_jadwal(request):
 @login_required(login_url='/login/')
 def liat_jadwal(request):
     jadwal = Jadwal.objects.filter(psikiater = request.user)
+    print(jadwal)
+    context = {"list_jadwal": jadwal}
+    return render(request, "list_jadwal.html", context)
