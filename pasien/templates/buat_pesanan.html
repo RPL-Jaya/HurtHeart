@@ -1,0 +1,21 @@
+{% extends 'base.html' %} {% block meta %}
+<title>Pesanan</title>
+{% endblock meta %}
+{% block content %}
+
+
+<form method="post">
+    <label for="psikiaterSelect">Psikiater:</label>
+    <select id="psikiaterSelect" name="psikiater" required>
+        <option value="" disabled selected>Psikiater</option>
+            {% for psikiater in dataPsikiater %}
+                <option value="{{ psikiater.username }}">{{ psikiater.first_name }} {{ psikiater.last_name }}</option>
+            {% endfor %}
+    </select>
+    <br>
+    {% csrf_token %}
+    {{ form.as_table }}
+    <button type="submit" class="btn btn-primary">Buat Pesanan</button>
+</form>
+
+{% endblock %}

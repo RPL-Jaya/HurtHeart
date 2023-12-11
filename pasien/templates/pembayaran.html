@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% block meta %}
+<title>Pembayaran</title>
+{% endblock meta %} {% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <button type="submit" class="btn btn-primary">Buat Pesanan</button>
+</form>
+
+{% endblock content %}

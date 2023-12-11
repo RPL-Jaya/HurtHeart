@@ -1,0 +1,21 @@
+{% extends 'base.html' %} {% block meta %}
+<title>Pesanan</title>
+{% endblock meta %}
+{% block content %}
+
+<!-- Daftar pesanan konsultasi -->
+{% if pesanan %}
+    <h2>Daftar Pesanan Konsultasi</h2>
+    <ul>
+        {% for pesan in pesanan %}
+            <li>
+                Jadwal Konsultasi: {{ pesan.jadwal_konsultasi }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Tidak ada pesanan konsultasi tersedia.</p>
+{% endif %}
+
+
+{% endblock %}

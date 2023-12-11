@@ -40,11 +40,3 @@ class Jadwal(models.Model):
     keterangan = models.CharField(max_length=255)
     kuota_total = models.IntegerField()
     kuota_tersedia = models.IntegerField()
-
-
-class JadwalKonsultasi(models.Model):
-    psikiater = models.ForeignKey(Psikiater, on_delete=models.CASCADE)
-    jadwal_konsultasi = models.DateTimeField()
-
-    def __str__(self):
-        return f"{self.psikiater.user.username} - {self.jadwal_konsultasi}"
