@@ -24,26 +24,15 @@ class PasienManager(models.Manager):
 class Pasien(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
-
-class Ulasan(models.Model):
-    pasien = models.ForeignKey(Pasien, on_delete=models.CASCADE)
-    psikiater = models.ForeignKey(Psikiater, on_delete=models.CASCADE)
-    komentar = models.TextField()
-    rating = models.FloatField()
-    tanggalKonsultasi = models.DateField()
-    namaPsikiater = models.CharField(max_length=100)
-
 class PesananKonsultasi(models.Model):
     BAYAR = "bayar"
     VERIFY = "verify"
-    PENDING = "pending"
     SCHED = "scheduled"
     DONE = "done"
     
     STATUS_KONSULTASI_CHOICES = [
         (BAYAR, "Menunggu Pembayaran"),
         (VERIFY, "Menunggu Verifikasi Admin"),
-        (PENDING, "Menunggu Konfirmasi Psikiater"),
         (SCHED, "Konsultasi Terjadwal"),
         (DONE, "Selesai")
     ]
@@ -58,6 +47,13 @@ class PesananKonsultasi(models.Model):
 
     def __str__(self):
         return f"{self.pasien} - {self.jadwal_konsultasi}"
+
+class Ulasan(models.Model):
+    pasien = models.ForeignKey(Pasien, on_delete=models.CASCADE)
+    psikiater = models.ForeignKey(Psikiater, on_delete=models.CASCADE)
+    pesanan = models.ForeignKey(PesananKonsultasi, on_delete=models.CASCADE)
+    komentar = models.TextField()
+    rating = models.FloatField()
 
 class Pembayaran(models.Model):
     OTS = "ots"
@@ -75,12 +71,10 @@ class Pembayaran(models.Model):
     ]
 
     pesanan = models.ForeignKey(PesananKonsultasi, on_delete=models.CASCADE)
-    biayaPembayaran = models.FloatField()
     metodePembayaran = models.CharField(
         max_length=7,
         choices=METODE_PEMBAYARAN_CHOICE,
     )
-    buktiPembayaran = models.ImageField(upload_to='images')
+    byte_image = models.TextField(blank=True)
     statusPembayaran = models.BooleanField(default=False)
     # timestamp = models.DateTimeField()
-

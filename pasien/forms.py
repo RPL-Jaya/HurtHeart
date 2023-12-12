@@ -3,16 +3,22 @@ from .models import Ulasan, Pembayaran, PesananKonsultasi
 from django import forms
 
 class UlasanForm(ModelForm):
+    tanggal = forms.CharField()
     class Meta:
         model = Ulasan
-        fields = ('pasien', 'psikiater', 'komentar', 'rating', 'tanggalKonsultasi', 'namaPsikiater')
+        fields = ('komentar', 'rating')
 
 class PembayaranForm(ModelForm):
+    byte_image = forms.FileField()
     class Meta:
         model = Pembayaran
-        exclude = ['pasien', 'biayaPembayaran', 'statusPembayaran']
+        fields = ['metodePembayaran']
 
-class PesananForm(ModelForm):
+class PesananForm(forms.ModelForm):
     class Meta:
         model = PesananKonsultasi
-        fields = ('jadwal_konsultasi',)
+        fields = ['jadwal_konsultasi']
+        # Add the 'psikiater' field
+        widgets = {
+            'psikiater': forms.Select(),
+        }

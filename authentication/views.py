@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, logout
 from .forms import RegisterForm
 from .models import User
-import sys
-sys.path.append("..")
-from psikiater.models import Psikiater
-from pasien.models import Pasien
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
+from psikiater.models import Psikiater, Jadwal
+from pasien.models import Pasien, Ulasan, PesananKonsultasi, Pembayaran
 
 # Create your views here.
 
@@ -17,26 +17,12 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(
-                username=user,
-                email=user.email,
-                first_name=user.first_name,
-                last_name=user.last_name,
-                date_of_birth=user.date_of_birth,
-                role=user.role
-            )
             user.set_password(request.POST.get('password'))
             user.save()
-            if form.cleaned_data["role"] == "psychiatrist":
+            if user.role == "psychiatrist":
                 Psikiater.objects.create(user=user)
-                print(Psikiater.objects.all())
-            elif form.cleaned_data["role"] == "patient":
+            elif user.role == "patient":
                 Pasien.objects.create(user=user)
-                print(Pasien.objects.all())
-            else:
-                user.is_superuser = True
-                user.is_staff = True
-                user.save()
             messages.success(request, 'Akun telah berhasil dibuat!')
             return redirect('authentication:login')
         print(form.errors)
@@ -53,7 +39,10 @@ def login_user(request):
             login(request, user)
             if user.role == "psychiatrist":
                 return redirect("/liat-jadwal")
-            return redirect('authentication:test')
+            elif user.role == "patient":
+                return redirect("/pesanan")
+            return redirect('/read-payment')
+
         else:
             messages.info(request, 'Username atau Password salah!')
     context = {}
@@ -69,3 +58,22 @@ def test(request):
 
 def home(request):
     return render(request, "home.html")
+
+def clear_data(request):
+
+    Jadwal.objects.all().delete()
+    Ulasan.objects.all().delete()
+    PesananKonsultasi.objects.all().delete()
+    Pembayaran.objects.all().delete()
+    return render(request, "test.html")
+
+def refresh_role(request):
+    for user in User.objects.all():
+        print(user)
+        if user.role == "psychiatrist":
+                if not Psikiater.objects.filter(user=user).exists():
+                    Psikiater.objects.create(user=user)
+        elif user.role == "patient":
+            if not Pasien.objects.filter(user=user).exists():
+                    Pasien.objects.create(user=user)
+    return render(request, "test.html")

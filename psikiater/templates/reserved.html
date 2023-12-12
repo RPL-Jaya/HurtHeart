@@ -1,6 +1,4 @@
-{% extends 'base.html' %} {% block meta %}
-<title>Pembayaran</title>
-{% endblock meta %} 
+{% extends 'base.html' %} 
 {% block header %} 
 <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
   <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
@@ -12,62 +10,44 @@
   </a>
 
   <ul class="nav nav-pills">
+    <li class="nav-item"><a href="/liat-jadwal" class="nav-link">Back</a></li>
     <li class="nav-item"><a href="/logout" class="nav-link active" aria-current="page">logout</a></li>
   </ul>
 </header>
 {% endblock header %}
 {% block content %}
-<div class="container">
-    <div class="container col-md-3 border rounded mb-5">
-        <table class="table">
-            <tr>
-                <th scope="row">Nama:</th>
-                <td>{{jadwal.psikiater.first_name}} {{jadwal.psikiater.last_name}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Tanggal:</th>
-                <td>{{jadwal.tanggal}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Jam:</th>
-                <td>{{jadwal.jam_mulai}} - {{jadwal.jam_selesai}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Metode:</th>
-                <td>{{jadwal.metode}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Keterangan:</th>
-                <td>{{jadwal.keterangan}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="container col-md-5 text-center mb-4">
-        <p>*Semua pembayaran bernilai Rp. 50.000.</p>
-    </div>
-    <div class="container col-md-5">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class = "mb-3">
-                <label for="metodePembayaran" class="form-label">Metode pembayaran:</label>
-                <select class="form-select" aria-label="Default select example" id="metodePembayaran" name="metodePembayaran">
-                    <option selected>Open this select menu</option>
-                    <option value="ots">Bayar di tempat</option>
-                    <option value="card">Kartu Kredit/Karti Debit</option>
-                    <option value="va">Virtual Account</option>
-                    <option value="ewallet">E-Wallet</option>
-                    <option value="retail">Gerai Retail</option>
-                  </select>
-            </div>
-            <div class="mb-3">
-                <label for="byte_image" class="form-label">Default file input example</label>
-                <input class="form-control" type="file" id="byte_image" name="byte_image">
-              </div>
-              <div class="mb-3">
-                <button type="submit" class="btn btn-primary btn-block">Submit</button>
-              </div>
-            
-          </form>
-    </div>
+
+<div class="container col-md-7 align-items-center text-center">
+  {% if list_jadwal|length == 0 %}
+  <h1 class="fw-bold mb-3">Psikiater belum memiliki jadwal</h1>
+  {% else %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Tanggal</th>
+        <th scope="col">Jam Mulai</th>
+        <th scope="col">Jam Selesai</th>
+        <th scope="col">Nama Pasien</th>
+        <th scope="col">Metode</th>
+        <th scope="col">Keterangan</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for jadwal in list_jadwal %}
+      <tr>
+        <td>{{jadwal.jadwal_konsultasi.tanggal}}</td>
+        <td>{{jadwal.jadwal_konsultasi.jam_mulai}}</td>
+        <td>{{jadwal.jadwal_konsultasi.jam_selesai}}</td>
+        <td>{{jadwal.pasien.first_name}} {{jadwal.pasien.last_name}}</td>
+        <td>{{jadwal.jadwal_konsultasi.metode}}</td>
+        <td>{{jadwal.jadwal_konsultasi.keterangan}}</td>
+        <td><a href="/selesai/{{jadwal.id}}" class="btn btn-outline-primary">Selesai</a></td>
+        
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
 </div>
-{% endblock content %}
+{% endblock %}

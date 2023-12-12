@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
-from .models import Pasien, Ulasan, PesananKonsultasi
+from .models import Pasien, Ulasan, PesananKonsultasi, Pembayaran
 from .forms import UlasanForm, PesananForm, PembayaranForm
 
 from psikiater.models import Psikiater, Jadwal
@@ -11,22 +11,31 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.shortcuts import get_object_or_404
+import base64
+
 
 # Create your views here.
 
 def buat_ulasan(request):
     print(request)
     form = UlasanForm()
-    print(form)
     if request.method == 'POST':
         form = UlasanForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('psikiater:psikiater_detail', username=form.cleaned_data['namaPsikiater'])
+            pesanan_konsultasi_pasien = PesananKonsultasi.objects.get(id=form.cleaned_data["tanggal"])
+            Ulasan.objects.create(pasien=Pasien.objects.get(user=request.user), 
+                                  psikiater=Psikiater.objects.get(user=pesanan_konsultasi_pasien.jadwal_konsultasi.psikiater),
+                                  pesanan=pesanan_konsultasi_pasien,
+                                  komentar=form.cleaned_data["komentar"],
+                                  rating=form.cleaned_data["rating"])
+            return redirect('/buat-pesanan')
 
-    pasien = Pasien.objects.all()
-    psikiater = Psikiater.objects.all()
-    context = {'form':form, 'pasien':pasien, 'psikiater':psikiater}
+    pesanan_konsultasi_pasien = PesananKonsultasi.objects.filter(pasien=request.user)
+    print(pesanan_konsultasi_pasien)
+    context = {'form':form, 'pesanan_konsulatasi':pesanan_konsultasi_pasien}
     return render(request, 'ulas.html', context)
 
 def buat_ulasan_api(request):
@@ -62,42 +71,49 @@ def pesanan_konsultasi_pasien(request):
 
 @login_required(login_url='/login/')
 def buat_pesanan(request):
-    form = PesananForm()
     data_psikiater = User.objects.filter(role='psychiatrist')
-
-    if request.method == "POST":
-        pasien = request.user
-        nama_psikiater = request.POST.get('psikiater')
-        
-        form_data = {
-            'user'
-        }
-        form = PesananForm()
-        if form.is_valid():
-            pesanan = form.save()
-            return render(request, 'pesanan_konsultasi.html')
-        
-    context = {'form': form, 'dataPsikiater': data_psikiater}
+    context = {'dataPsikiater': data_psikiater}
     return render(request, 'buat_pesanan.html', context)
+
+def lihat_jadwal_psikiater(request, psikiater_id):
+    if request.method == "GET":
+        # psikiater_id = request.GET.get('psikiater_id')
+        psikiater = User.objects.get(username=psikiater_id)
+        jadwal_objects = Jadwal.objects.filter(psikiater=psikiater)
+
+        context = {'jadwal_objects': jadwal_objects, 'selected_psikiater': psikiater, 'psikiater_id': psikiater_id}
+        return render(request, 'lihat_jadwal_psikiater.html', context)
 
 @login_required(login_url='/login/')
 def liat_pesanan(request):
     pesanan = PesananKonsultasi.objects.filter(pasien=request.user)
-    return render(request, 'pesanan_konsultasi.html', {'list_pesanan': pesanan})
+    print(pesanan)
+    context = {'list_pesanan': pesanan}
+    return render(request, 'pesanan_konsultasi.html', context)
 
-def buat_pembayaran(request):
+def buat_pembayaran(request, jadwal_id):
     form = PembayaranForm()
     if request.method == 'POST':
         form = PembayaranForm(request.POST, request.FILES)
-        data = request.data
         if form.is_valid():
-            pembayaran = form.save()
-            pembayaran.pasien = data['pasien']
-            pembayaran.save()
-            img_obj = form.instance
+            byte_data = None
+            # Process the image file
+            image_file = request.FILES['byte_image']
+            with image_file.open('rb') as file:
+                byte_data = base64.b64encode(file.read())
+                byte_data = byte_data.decode('utf-8')
 
-            context = {'form': form, 'img_obj': img_obj}
-            return render(request, 'pembayaran.html', context)
+            Pembayaran.objects.create(pesanan=PesananKonsultasi.objects.get(pasien=request.user, jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id)), 
+                                      metodePembayaran=form.cleaned_data["metodePembayaran"],
+                                      byte_image=byte_data)
+
+            pesanan_konsultasi = PesananKonsultasi.objects.get(jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id))
+            pesanan_konsultasi.status = PesananKonsultasi.VERIFY
+            pesanan_konsultasi.save()
+            return redirect("/pesanan")
         
-    context = {'form': form}
+    PesananKonsultasi.objects.create(pasien=request.user, jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id))
+    
+    jadwal = Jadwal.objects.get(id=jadwal_id)
+    context = {'form': form, "jadwal":jadwal}
     return render(request, 'pembayaran.html', context)
