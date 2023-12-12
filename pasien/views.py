@@ -112,7 +112,8 @@ def buat_pembayaran(request, jadwal_id):
             pesanan_konsultasi.save()
             return redirect("/pesanan")
         
-    PesananKonsultasi.objects.create(pasien=request.user, jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id))
+    if not PesananKonsultasi.objects.filter(pasien=request.user, jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id)).exists():
+        PesananKonsultasi.objects.create(pasien=request.user, jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id))
     
     jadwal = Jadwal.objects.get(id=jadwal_id)
     context = {'form': form, "jadwal":jadwal}
