@@ -3,9 +3,10 @@ from .models import Ulasan, Pembayaran, PesananKonsultasi
 from django import forms
 
 class UlasanForm(ModelForm):
+    tanggal = forms.CharField()
     class Meta:
         model = Ulasan
-        fields = ('pasien', 'psikiater', 'komentar', 'rating', 'tanggalKonsultasi', 'namaPsikiater')
+        fields = ('komentar', 'rating')
 
 class PembayaranForm(ModelForm):
     byte_image = forms.FileField()

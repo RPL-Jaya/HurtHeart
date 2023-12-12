@@ -22,16 +22,20 @@ import base64
 def buat_ulasan(request):
     print(request)
     form = UlasanForm()
-    print(form)
     if request.method == 'POST':
         form = UlasanForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('psikiater:psikiater_detail', username=form.cleaned_data['namaPsikiater'])
+            pesanan_konsultasi_pasien = PesananKonsultasi.objects.get(id=form.cleaned_data["tanggal"])
+            Ulasan.objects.create(pasien=Pasien.objects.get(user=request.user), 
+                                  psikiater=Psikiater.objects.get(user=pesanan_konsultasi_pasien.jadwal_konsultasi.psikiater),
+                                  pesanan=pesanan_konsultasi_pasien,
+                                  komentar=form.cleaned_data["komentar"],
+                                  rating=form.cleaned_data["rating"])
+            return redirect('/buat-pesanan')
 
-    pasien = Pasien.objects.all()
-    psikiater = Psikiater.objects.all()
-    context = {'form':form, 'pasien':pasien, 'psikiater':psikiater}
+    pesanan_konsultasi_pasien = PesananKonsultasi.objects.filter(pasien=request.user)
+    print(pesanan_konsultasi_pasien)
+    context = {'form':form, 'pesanan_konsulatasi':pesanan_konsultasi_pasien}
     return render(request, 'ulas.html', context)
 
 def buat_ulasan_api(request):
@@ -103,6 +107,9 @@ def buat_pembayaran(request, jadwal_id):
                                       metodePembayaran=form.cleaned_data["metodePembayaran"],
                                       byte_image=byte_data)
 
+            pesanan_konsultasi = PesananKonsultasi.objects.get(jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id))
+            pesanan_konsultasi.status = PesananKonsultasi.VERIFY
+            pesanan_konsultasi.save()
             return redirect("/pesanan")
         
     PesananKonsultasi.objects.create(pasien=request.user, jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id))

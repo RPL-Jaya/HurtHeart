@@ -6,6 +6,7 @@ from django.forms.models import model_to_dict
 from .forms import JadwalForm
 from django.contrib.auth.decorators import login_required
 from authentication.models import User
+from pasien.models import PesananKonsultasi
 
 # Create your views here.
 
@@ -67,3 +68,26 @@ def liat_jadwal(request):
     print(jadwal)
     context = {"list_jadwal": jadwal}
     return render(request, "list_jadwal.html", context)
+
+def liat_reserved(request):
+    jadwal = Jadwal.objects.filter(psikiater = request.user)
+    print(jadwal)
+    reserved_konsultasi = []
+    for item in jadwal:
+        jadwal_konsultasi=Jadwal.objects.get(id=item.id)
+        if PesananKonsultasi.objects.filter(jadwal_konsultasi=jadwal_konsultasi, status=PesananKonsultasi.SCHED).exists():
+            reserved_konsultasi.append(PesananKonsultasi.objects.get(jadwal_konsultasi=jadwal_konsultasi, status=PesananKonsultasi.SCHED))
+    print(reserved_konsultasi)
+    context = {"list_jadwal": reserved_konsultasi}
+    return render(request, "reserved.html", context)
+
+def selesai(request, pk):
+    pesanan = PesananKonsultasi.objects.get(id=pk)
+    pesanan.status = PesananKonsultasi.DONE
+    pesanan.save()
+    return redirect("/reserved")
+
+def review(request):
+    list_review = Ulasan.objects.filter(psikiater=Psikiater.objects.get(user=request.user))
+    context={"list_reveiw":list_review}
+    return render(request, "review.html", context)

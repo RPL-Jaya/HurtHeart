@@ -37,6 +37,10 @@ def accept(request,pk):
     pesanan_konsultasi = payment.pesanan
     pesanan_konsultasi.status = PesananKonsultasi.SCHED
     pesanan_konsultasi.save()
+
+    jadwal = payment.pesanan.jadwal_konsultasi
+    jadwal.kuota_tersedia -=1
+    jadwal.save()
     
     return redirect("/read-payment")
 

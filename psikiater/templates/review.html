@@ -1,6 +1,4 @@
-{% extends 'base.html' %} {% block meta %}
-<title>Pesanan</title>
-{% endblock meta %}
+{% extends 'base.html' %} 
 {% block header %} 
 <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
   <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
@@ -12,54 +10,39 @@
   </a>
 
   <ul class="nav nav-pills">
-    <li class="nav-item"><a href="/ulas" class="nav-link">review</a></li>
+    <li class="nav-item"><a href="/liat-jadwal" class="nav-link">back</a></li>
     <li class="nav-item"><a href="/logout" class="nav-link active" aria-current="page">logout</a></li>
   </ul>
 </header>
 {% endblock header %}
 {% block content %}
 
-<!-- Daftar pesanan konsultasi -->
 <div class="container col-md-7 align-items-center text-center">
-    {% if list_pesanan %}
-    <h2>Daftar Pesanan Konsultasi</h2>
-    <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Nama Psikiater</th>
-            <th scope="col">Jam Mulai</th>
-            <th scope="col">Jam Selesai</th>
-            <th scope="col">Metode</th>
-            <th scope="col">Keterangan</th>
-            <th scope="col">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for pesanan in list_pesanan %}
-            <tr>
-            <td>{{pesanan.jadwal_konsultasi.psikiater.first_name}} {{pesanan.jadwal_konsultasi.psikiater.last_name}}</td>
-            <td>{{pesanan.jadwal_konsultasi.jam_mulai}}</td>
-            <td>{{pesanan.jadwal_konsultasi.jam_selesai}}</td>
-            <td>{{pesanan.jadwal_konsultasi.metode}}</td>
-            <td>{{pesanan.jadwal_konsultasi.keterangan}}</td>
-            {% if pesanan.status == 'BAYAR' %}
-            <td>
-                <a type="button" class="btn btn-outline-danger btn-sm justify-content-center" href="/pembayaran/">Belum Dibayar</a>
-            </td>
-            {% else %}
-            <td>{{pesanan.status}}</td>
-            {% endif %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <p>Tidak ada pesanan konsultasi tersedia.</p>
+  {% if list_reveiw|length == 0 %}
+  <h1 class="fw-bold mb-3">Belum ada review</h1>
+  {% else %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Tanggal</th>
+        <th scope="col">Nama pasien</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Komentar</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for review in list_reveiw %}
+      <tr>
+        <td>{{review.pesanan.jadwal_konsultasi.tanggal}}</td>
+        <td>{{review.pasien.user.first_name}} {{review.pasien.user.last_name}}</td>
+        <td>{{review.rating}}</td>
+        <td>{{review.komentar}}</td>
         
-    {% endif %}
-    <a type="button" class="btn btn-outline-primary btn-lg btn-block justify-content-center" href="/buat-pesanan/">Pesan Konsultasi</a>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
 </div>
-
-
-
 {% endblock %}
