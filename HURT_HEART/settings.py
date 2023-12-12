@@ -134,3 +134,5 @@ AUTH_USER_MODEL = 'authentication.User'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 MEDIA_URL = 'media/'
+
+TIMEOUT = 30
