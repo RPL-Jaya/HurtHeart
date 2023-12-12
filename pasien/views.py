@@ -109,7 +109,6 @@ def buat_pembayaran(request, jadwal_id):
 
             pesanan_konsultasi = PesananKonsultasi.objects.get(jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id), pasien=request.user)
             pesanan_konsultasi.status = PesananKonsultasi.VERIFY
-            pesanan_konsultasi.save()
             return redirect("/pesanan")
         
     if not PesananKonsultasi.objects.filter(pasien=request.user, jadwal_konsultasi=Jadwal.objects.get(id=jadwal_id)).exists():
