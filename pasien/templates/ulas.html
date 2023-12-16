@@ -22,11 +22,15 @@
 
 <!-- If pesanan konsultasi is empty -->
 <div class="container col-md-5">
-  {% if rating_error %}
-    <h1>Rating harus bintang 5</h1>
-  {% endif %}
   <!-- If data is 0 -->
   {% if has_data %}
+
+  {% if review_exists %}
+  <div class="alert alert-danger" role="alert">
+    <li>Anda sudah mengulas konsultasi ini</li>
+  </div>
+  {% endif %}
+
   <form method="POST">
     {% csrf_token %}
     <div class="mb-3">
@@ -41,11 +45,25 @@
 
     <div class="mb-3">
       <label for="rating" class="form-label">Rating</label>
+      {% if form.rating.errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for error in form.rating.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </div>
+      {% endif %}
       <input type="number" class="form-control" name="rating" min="0" max="5" id="rating" />
     </div>
 
     <div class="mb-3">
       <label for="komentar" class="form-label">Komentar</label>
+      {% if form.komentar.errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for error in form.komentar.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </div>
+      {% endif %}
       <textarea class="form-control" id="komentar" name="komentar" rows="3"></textarea>
     </div>
 

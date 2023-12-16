@@ -22,24 +22,29 @@ import base64
 def buat_ulasan(request):
     print(request)
     form = UlasanForm()
-    rating_error = False
+    review_exists = False
     if request.method == 'POST':
         form = UlasanForm(request.POST)
-        is_valid = form.is_valid()
-        rating_error = form.cleaned_data["rating"] != 5
-        if is_valid and not rating_error:
+        if form.is_valid():
             pesanan_konsultasi_pasien = PesananKonsultasi.objects.get(id=form.cleaned_data["tanggal"])
-            Ulasan.objects.create(pasien=Pasien.objects.get(user=request.user),
-                                  psikiater=Psikiater.objects.get(user=pesanan_konsultasi_pasien.jadwal_konsultasi.psikiater),
-                                  pesanan=pesanan_konsultasi_pasien,
-                                  komentar=form.cleaned_data["komentar"],
-                                  rating=form.cleaned_data["rating"])
-            return redirect('/buat-pesanan')
+            # Check if the user has already made a review
+            if Ulasan.objects.filter(pasien=Pasien.objects.get(user=request.user),
+                                        psikiater=Psikiater.objects.get(user=pesanan_konsultasi_pasien.jadwal_konsultasi.psikiater),
+                                        pesanan=pesanan_konsultasi_pasien).exists():
+                review_exists = True
+            else:
 
-    pesanan_konsultasi_pasien = PesananKonsultasi.objects.filter(pasien=request.user, status=PesananKonsultasi.DONE, ulasan__isnull=True)
+                Ulasan.objects.create(pasien=Pasien.objects.get(user=request.user),
+                                    psikiater=Psikiater.objects.get(user=pesanan_konsultasi_pasien.jadwal_konsultasi.psikiater),
+                                    pesanan=pesanan_konsultasi_pasien,
+                                    komentar=form.cleaned_data["komentar"],
+                                    rating=form.cleaned_data["rating"])
+                return redirect('/buat-pesanan')
+
+    pesanan_konsultasi_pasien = PesananKonsultasi.objects.filter(pasien=request.user, status=PesananKonsultasi.DONE)
     has_data = len(pesanan_konsultasi_pasien) > 0
     print(pesanan_konsultasi_pasien)
-    context = {'form':form, 'pesanan_konsulatasi':pesanan_konsultasi_pasien, 'rating_error':rating_error, 'has_data':has_data}
+    context = {'form':form, 'pesanan_konsulatasi':pesanan_konsultasi_pasien, 'has_data':has_data, 'review_exists':review_exists}
     return render(request, 'ulas.html', context)
 
 def buat_ulasan_api(request):
