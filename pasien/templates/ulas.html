@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block meta %}
 <title>Register</title>
-{% endblock meta %} 
-{% block header %} 
+{% endblock meta %}
+{% block header %}
 <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
   <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
     <svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none">
@@ -19,7 +19,10 @@
 {% endblock header %}
 {% block content %}
 
+
+<!-- If pesanan konsultasi is empty -->
 <div class="container col-md-5">
+  {% if pesanan_konsultasi %}
   <form method="POST">
     {% csrf_token %}
     <div class="mb-3">
@@ -44,5 +47,11 @@
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+  {% else %}
+  <div class="container col-md-5">
+    <h1>Tidak ada konsultasi yang bisa diulas</h1>
+  </div>
+
+  {% endif %}
 </div>
 {% endblock content %}
