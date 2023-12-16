@@ -31,7 +31,7 @@ def psikiater_detail_api(request, username):
 # List of psikiater
 def psikiater_list(request):
     # Get all psikiater
-    psikiater = Psikiater.objects.list_psikiater()
+    psikiater = Psikiater.objects.all()
     context = {'psikiater_list': psikiater}
     return render(request, 'list.html', context)
 
@@ -57,8 +57,8 @@ def add_jadwal(request):
             Jadwal.objects.create(psikiater = request.user,tanggal = tanggal, jam_mulai = jam_mulai, jam_selesai = jam_selesai, metode = metode, keterangan = keterangan, kuota_total = kuota_total, kuota_tersedia = kuota_total)
             print("saved")
             return redirect("/liat-jadwal")
-            
-    
+
+
     context = {"form":form}
     return render(request, "buat_jadwal.html", context)
 
