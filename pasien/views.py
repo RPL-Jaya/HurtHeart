@@ -22,9 +22,11 @@ import base64
 def buat_ulasan(request):
     print(request)
     form = UlasanForm()
+    rating_error = False
     if request.method == 'POST':
         form = UlasanForm(request.POST)
-        if form.is_valid():
+        rating_error = form.cleaned_data["rating"] != 5
+        if form.is_valid() and not rating_error:
             pesanan_konsultasi_pasien = PesananKonsultasi.objects.get(id=form.cleaned_data["tanggal"])
             Ulasan.objects.create(pasien=Pasien.objects.get(user=request.user),
                                   psikiater=Psikiater.objects.get(user=pesanan_konsultasi_pasien.jadwal_konsultasi.psikiater),
@@ -35,7 +37,7 @@ def buat_ulasan(request):
 
     pesanan_konsultasi_pasien = PesananKonsultasi.objects.filter(pasien=request.user, status=PesananKonsultasi.DONE, ulasan__isnull=True)
     print(pesanan_konsultasi_pasien)
-    context = {'form':form, 'pesanan_konsulatasi':pesanan_konsultasi_pasien}
+    context = {'form':form, 'pesanan_konsulatasi':pesanan_konsultasi_pasien, 'rating_error':rating_error}
     return render(request, 'ulas.html', context)
 
 def buat_ulasan_api(request):

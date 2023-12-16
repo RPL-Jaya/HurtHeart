@@ -22,6 +22,10 @@
 
 <!-- If pesanan konsultasi is empty -->
 <div class="container col-md-5">
+  {% if rating_error %}
+    <h1>Rating harus bintang 5</h1>
+  {% endif %}
+
   {% if pesanan_konsultasi %}
   <form method="POST">
     {% csrf_token %}
@@ -48,10 +52,7 @@
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
   {% else %}
-  <div class="container col-md-5">
     <h1>Tidak ada konsultasi yang bisa diulas</h1>
-  </div>
-
   {% endif %}
 </div>
 {% endblock content %}
