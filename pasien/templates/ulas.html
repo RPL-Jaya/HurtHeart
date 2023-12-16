@@ -25,8 +25,8 @@
   {% if rating_error %}
     <h1>Rating harus bintang 5</h1>
   {% endif %}
-
-  {% if pesanan_konsultasi %}
+  <!-- If data is 0 -->
+  {% if has_data %}
   <form method="POST">
     {% csrf_token %}
     <div class="mb-3">
